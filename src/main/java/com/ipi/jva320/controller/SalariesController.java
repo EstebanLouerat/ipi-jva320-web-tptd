@@ -9,10 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Pageable;
 import java.io.Console;
@@ -71,16 +68,15 @@ public class SalariesController {
     }
 
     @PostMapping("/salaries/save")
-    private String saveSalaries(SalarieAideADomicile salarie) throws SalarieException {
+    private String saveSalaries(@ModelAttribute SalarieAideADomicile salarie) throws SalarieException {
         salarieService.creerSalarieAideADomicile(salarie);
 
         return "redirect:/salaries";
     }
 
     @PostMapping("/salaries/update")
-    private String updateSalaries(SalarieAideADomicile salarie) throws SalarieException {
-        salarieService.creerSalarieAideADomicile(salarie);
-
+    private String updateSalaries(@ModelAttribute SalarieAideADomicile salarie) throws SalarieException {
+        salarieService.updateSalarieAideADomicile(salarie);
         return "redirect:/salaries";
     }
 
@@ -91,8 +87,14 @@ public class SalariesController {
         {
             return "not_found";
         }
-        model.put("salaries", salaries);
+//        model.put("salaries", salaries);
         model.addAttribute("errorMessage", "No User find with this name");
-        return "list";
+        return "home";
+    }
+
+    @GetMapping("/salaries/{id}/delete")
+    public String deleteSalarie(@PathVariable Long id) throws SalarieException {
+        salarieService.deleteSalarieAideADomicile(id);
+        return "redirect:/salaries";
     }
 }
