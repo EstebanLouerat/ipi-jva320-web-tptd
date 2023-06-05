@@ -1,56 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-    <title>Gestion des salariés</title>
-    <link rel="stylesheet" href="/static/bootstrap.min.css">
-    <link rel="stylesheet" href="./static/font-awesome.css">
-</head>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:insert="~{common :: head}"></head>
 <body>
-
-<div>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="http://localhost:8080/">Gestion des salariés</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li><a href="http://localhost:8080/salaries?page=0&amp;size=10&amp;sortProperty=nom&amp;sortDirection=ASC" class="nav-link">Liste des salariés <span class="badge badge-primary">26</span></a></li>
-            </ul>
-
-            <form class="form-inline my-2 my-lg-0" role="search" action="http://localhost:8080/salaries" method="GET">
-                <div class="form-group form-inline">
-                    <input name="nom" class="form-control" placeholder="Rechercher un nom" type="text">
-                </div>
-                <button type="submit" class="btn btn-outline-success ml-2 my-2 my-sm-0">Rechercher</button>
-            </form>
-        </div>
-    </nav>
-</div>
-
+<div th:insert="~{common :: nav}"></div>
 <div class="container">
     <div th:text="#{msg.salarie}"></div><!-- TODO better messages example -->
 
     <h2>Détail du salarié</h2>
     
-    <form id="saveForm" action="http://localhost:8080/salaries/aide/10" method="post" class="row">
+    <form id="saveForm" th:action="@{/salaries/save}" method="post" class="row">
 
         <div class="col-lg-6">
             <div class="form-group">
                 <label class="form-control-label" for="id">ID</label>
-                <input type="text" value="10" class="form-control" name="id" id="id" disabled="true">
+                <input type="text" th:value="${salarie.id} ?: 0" class="form-control" name="id" id="id" disabled="disabled">
 
                 <label class="form-control-label" for="nom">Nom</label>
-                <input type="text" value="Jean Dupont" class="form-control" name="nom" id="nom">
+                <input type="text" th:value="${salarie.nom} ?: ''" class="form-control" name="nom" id="nom">
 
-                <label class="form-control-label" for="nom">moisEnCours</label>
-                <input type="date" value="03/2023" class="form-control" name="moisEnCours"
-                       id="moisEnCours">
+                <label class="form-control-label" for="nom">Mois en cours</label>
+                <label for="moisEnCours"></label><input type="date" th:value="${salarie.moisEnCours} ?: ''" class="form-control" name="moisEnCours"
+                                                        id="moisEnCours">
 
-                <label class="form-control-label" for="nom">moisDebutContrat</label>
-                <input type="date" value="08/2022" class="form-control" name="moisDebutContrat" id="moisDebutContrat">
+                <label class="form-control-label" for="nom">Mois de début de contrat</label>
+                <label for="moisDebutContrat"></label><input type="date" th:value="${salarie.moisDebutContrat} ?: ''" class="form-control" name="moisDebutContrat" id="moisDebutContrat">
             </div>
         </div>
 
@@ -58,9 +31,9 @@
             <div class="form-group">
 
                 <div>
-                    <label class="form-control-label" for="nom">joursTravaillesAnneeN</label>
+                    <label class="form-control-label" for="nom">Jours travaillés Année N</label>
                     <div class="input-group">
-                        <input type="number" step="0.5" value="20" class="form-control" name="joursTravaillesAnneeN" id="joursTravaillesAnneeN">
+                        <label for="joursTravaillesAnneeN"></label><input type="number" step="0.5" th:value="${salarie.joursTravaillesAnneeN >= 0} ?: ''" class="form-control" name="joursTravaillesAnneeN" id="joursTravaillesAnneeN">
                         <div class="input-group-append">
                             <span class="input-group-text">j</span>
                         </div>
@@ -68,9 +41,9 @@
                 </div>
 
                 <div>
-                    <label class="form-control-label" for="nom">congesPayesAcquisAnneeN</label>
+                    <label class="form-control-label" for="nom">Congés payés acquis Année N</label>
                     <div class="input-group">
-                        <input type="number" step="0.5" value="2.5" class="form-control" name="congesPayesAcquisAnneeN" id="congesPayesAcquisAnneeN">
+                        <label for="congesPayesAcquisAnneeN"></label><input type="number" step="0.5" th:value="${salarie.congesPayesAcquisAnneeN >= 0} ?: ''" class="form-control" name="congesPayesAcquisAnneeN" id="congesPayesAcquisAnneeN">
                     <div class="input-group-append">
                         <span class="input-group-text">j</span>
                     </div>
@@ -82,9 +55,9 @@
 
         <div class="col-lg-6">
             <div>
-                <label class="form-control-label" for="nom">joursTravaillesAnneeNMoins1</label>
+                <label class="form-control-label" for="nom">Jours travaillés Année N - 1</label>
                 <div class="input-group">
-                    <input type="number" step="0.5" value="80" class="form-control" name="joursTravaillesAnneeNMoins1" id="joursTravaillesAnneeNMoins1">
+                    <label for="joursTravaillesAnneeNMoins1"></label><input type="number" step="0.5" th:value="${salarie.joursTravaillesAnneeNMoins1 >= 0} ?: ''" class="form-control" name="joursTravaillesAnneeNMoins1" id="joursTravaillesAnneeNMoins1">
                     <div class="input-group-append">
                         <span class="input-group-text">j</span>
                     </div>
@@ -92,9 +65,9 @@
             </div>
 
             <div>
-                <label class="form-control-label" for="nom">congesPayesAcquisAnneeNMoins1</label>
+                <label class="form-control-label" for="nom">Congés payés acquis Année N - 1</label>
                 <div class="input-group">
-                    <input type="number" step="0.5" value="10" class="form-control" name="congesPayesAcquisAnneeNMoins1" id="congesPayesAcquisAnneeNMoins1">
+                    <label for="congesPayesAcquisAnneeNMoins1"></label><input type="number" step="0.5" th:value="${salarie.congesPayesAcquisAnneeNMoins1 >= 0} ?: ''" class="form-control" name="congesPayesAcquisAnneeNMoins1" id="congesPayesAcquisAnneeNMoins1">
                     <div class="input-group-append">
                         <span class="input-group-text">j</span>
                     </div>
@@ -102,9 +75,9 @@
             </div>
 
             <div>
-                <label class="form-control-label" for="nom">congesPayesPrisAnneeNMoins1</label>
+                <label class="form-control-label" for="nom">Congés payés pris Année N - 1</label>
                 <div class="input-group">
-                    <input type="number" step="0.5" value="4" class="form-control" name="congesPayesPrisAnneeNMoins1" id="congesPayesPrisAnneeNMoins1">
+                    <label for="congesPayesPrisAnneeNMoins1"></label><input type="number" step="0.5" th:value="${salarie.congesPayesPrisAnneeNMoins1 >= 0} ?: ''" class="form-control" name="congesPayesPrisAnneeNMoins1" id="congesPayesPrisAnneeNMoins1">
                     <div class="input-group-append">
                         <span class="input-group-text">j</span>
                     </div>
